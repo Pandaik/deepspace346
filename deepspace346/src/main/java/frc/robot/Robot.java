@@ -10,8 +10,8 @@ package frc.robot;
 import frc.subsystems.*;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
   public Drive sDrive;
@@ -36,8 +36,11 @@ public class Robot extends TimedRobot {
 
   public void teleopPeriodic() {
     sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
+
     sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE),
       sControlBoard.getBoardButton(sControlBoard.OUTTAKE));
+
+    
   }
 
   public void testPeriodic() {
