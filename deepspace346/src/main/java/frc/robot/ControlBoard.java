@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class ControlBoard {
     public XboxController con;
+    public XboxController board;
     private static final int    LEFT_STICK_X = 0,   RIGHT_STICK_X = 2,
                                 LEFT_STICK_Y = 1,   RIGHT_STICK_Y = 5,
                                 LEFT_TRIGGER = 3,   RIGHT_TRIGGER = 4,
@@ -22,7 +23,9 @@ public class ControlBoard {
                                 CIRCLE = 3,         TRIANGLE = 4,
                                 SHARE = 9,          OPTIONS = 10,
                                 LEFT_STICK = 11,    RIGHT_STICK = 12,
-                                PS = 13;
+                                PS = 13,
+
+                                INTAKE = 0;
 
 
     public ControlBoard(){
@@ -36,7 +39,11 @@ public class ControlBoard {
     public double[] getRightStick(){
         return new double[]{con.getRawAxis(RIGHT_STICK_X), -con.getRawAxis(RIGHT_STICK_Y)};
     }
-    public boolean getButton(int _button){
+    public boolean getConButton(int _button){
         return con.getRawButton(_button);
     }
+    public boolean getBoardButton(int _button){
+        return board.getRawButton(_button);
+    }
+
 }

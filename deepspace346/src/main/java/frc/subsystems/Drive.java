@@ -41,9 +41,9 @@ public class Drive {
         sDriveRightSlave1.set(ControlMode.Follower, RobotMap.kDriveRightMasterP);
         sDriveRightSlave2.set(ControlMode.Follower, RobotMap.kDriveRightMasterP);
     }
-    public void driveWithController(double _left, double _right){
-        double lrcon = _left;
-        double fcon = _right;
+    public void driveWithController(double[] _left, double[] _right){
+        double lrcon = _left[0];
+        double fcon = _right[1];
         double rspd = fcon + lrcon*RobotMap.kMaxTurnSpeed;
         double lspd = fcon - lrcon*RobotMap.kMaxTurnSpeed;
 
