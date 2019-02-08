@@ -21,7 +21,12 @@ public class RobotMap {
 
     public static final int kIntakeP = 0;
 
-    public static int kControllerP = 0;
+    public static final int kArmMasterP = 0;
+    public static final int kArmSlaveP = 0;
+
+    public static final int kControllerP = 0;
     
     public static double kMaxTurnSpeed = .75;
+    public static double kIntakeSpeed = .2;
+    public static double kOuttakeSpeed = .5;
 }
