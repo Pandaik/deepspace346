@@ -49,7 +49,5 @@ public class Drive {
 
         sDriveLeftMaster.set(ControlMode.PercentOutput, rspd);
         sDriveRightMaster.set(ControlMode.PercentOutput, lspd);
-        
-        
     }
 }

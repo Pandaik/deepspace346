@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 public class ControlBoard {
     public XboxController con;
     public XboxController board;
-    private static final int    LEFT_STICK_X = 0,   RIGHT_STICK_X = 2,
+    protected final int         LEFT_STICK_X = 0,   RIGHT_STICK_X = 2,
                                 LEFT_STICK_Y = 1,   RIGHT_STICK_Y = 5,
                                 LEFT_TRIGGER = 3,   RIGHT_TRIGGER = 4,
                                 LEFT_BUMPER = 5,    RIGHT_BUMPER = 6,
@@ -25,7 +25,7 @@ public class ControlBoard {
                                 LEFT_STICK = 11,    RIGHT_STICK = 12,
                                 PS = 13,
 
-                                INTAKE = 0;
+                                INTAKE = 1,         OUTTAKE = 2;
 
 
     public ControlBoard(){
@@ -33,6 +33,7 @@ public class ControlBoard {
     }
 
     // Returns an array with [X,Y] and converts to Up is positive and Right is positive
+    // This is used to make the sticks more manageable :P
     public double[] getLeftStick(){
         return new double[]{con.getRawAxis(LEFT_STICK_X), -con.getRawAxis(LEFT_STICK_Y)};
     }

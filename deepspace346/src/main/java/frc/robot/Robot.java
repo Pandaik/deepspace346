@@ -35,7 +35,9 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    
+    sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
+    sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE),
+      sControlBoard.getBoardButton(sControlBoard.OUTTAKE));
   }
 
   public void testPeriodic() {
