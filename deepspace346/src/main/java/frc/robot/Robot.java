@@ -40,24 +40,24 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    // sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
+    sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
 
-    // sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE),
-    //   sControlBoard.getBoardButton(sControlBoard.OUTTAKE));
+    sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE),
+      sControlBoard.getBoardButton(sControlBoard.OUTTAKE));
     
-    // if(sControlBoard.getConButton(sControlBoard.SQUARE)){
-    //   sArm.setArmPos(sArm.NEUTRAL);
-    // }else{
-    //   if(sControlBoard.getConButton(sControlBoard.X)){
-    //     sArm.setArmPos(sArm.HIGH);
-    //   }else{
-    //     if(sControlBoard.getConButton(sControlBoard.CIRCLE)){
-    //       sArm.setArmPos(sArm.INTAKE);
-    //     }
-    //   }
+    if(sControlBoard.getConButton(sControlBoard.SQUARE)){
+      sArm.setArmPos(sArm.NEUTRAL);
+    }else{
+      if(sControlBoard.getConButton(sControlBoard.X)){
+        sArm.setArmPos(sArm.HIGH);
+      }else{
+        if(sControlBoard.getConButton(sControlBoard.CIRCLE)){
+          sArm.setArmPos(sArm.INTAKE);
+        }
+      }
       
-    // }
-    // sArm.moveArm();
+    }
+    sArm.moveArm();
     if(sControlBoard.getConButtonPressed(sControlBoard.RIGHT_BUMPER)){
       sHatch.togglePush();
     }
