@@ -30,6 +30,18 @@ public class RobotMap {
     public static double kIntakeSpeed = .2;
     public static double kOuttakeSpeed = .5;
 
-    public final static int kArmEncoderRev = 1000;
+    // public final static int kArmEncoderRev = 1000;
+    
+    public static int kArmNeutral = 0;
+    public static int kArmUp = 256;
+    public static int kArmIntake = 512;
+    
+    public static final int kSlotIdx = 1;
+	public static final int kPIDLoopIdx = 0;
+	public static final int kTimeoutMs = 30;
+    public static final Gains kGains = new Gains(5, 0., 0.0, 0, 0, 0);
+
+    public static final int kHatchPushP = 3;
+    public static final int kHatchGrabP = 2;
 
 }

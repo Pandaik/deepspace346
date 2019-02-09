@@ -46,5 +46,11 @@ public class ControlBoard {
     public boolean getBoardButton(int _button){
         return board.getRawButton(_button);
     }
+    public boolean getConButtonPressed(int _button){
+        return con.getRawButtonPressed(_button);
+    }
+    public boolean getBoardButtonPressed(int _button){
+        return board.getRawButtonPressed(_button);
+    }
 
 }

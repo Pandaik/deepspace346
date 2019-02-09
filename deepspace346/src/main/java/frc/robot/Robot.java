@@ -18,12 +18,14 @@ public class Robot extends TimedRobot {
   public Intake sIntake;
   public ControlBoard sControlBoard;
   public Arm sArm;
+  public Hatch sHatch;
 
   public void robotInit() {
     sDrive = new Drive();
     sIntake = new Intake();
     sControlBoard = new ControlBoard();
     sArm = new Arm();
+    sHatch = new Hatch();
   }
 
   public void robotPeriodic() {
@@ -38,15 +40,34 @@ public class Robot extends TimedRobot {
   }
 
   public void teleopPeriodic() {
-    sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
+    // sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
 
-    sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE),
-      sControlBoard.getBoardButton(sControlBoard.OUTTAKE));
+    // sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE),
+    //   sControlBoard.getBoardButton(sControlBoard.OUTTAKE));
+    
+    // if(sControlBoard.getConButton(sControlBoard.SQUARE)){
+    //   sArm.setArmPos(sArm.NEUTRAL);
+    // }else{
+    //   if(sControlBoard.getConButton(sControlBoard.X)){
+    //     sArm.setArmPos(sArm.HIGH);
+    //   }else{
+    //     if(sControlBoard.getConButton(sControlBoard.CIRCLE)){
+    //       sArm.setArmPos(sArm.INTAKE);
+    //     }
+    //   }
+      
+    // }
+    // sArm.moveArm();
+    if(sControlBoard.getConButtonPressed(sControlBoard.RIGHT_BUMPER)){
+      sHatch.togglePush();
+    }
+    if(sControlBoard.getConButtonPressed(sControlBoard.LEFT_BUMPER)){
+      sHatch.toggleGrab();
+    }
 
     
   }
 
   public void testPeriodic() {
-    sArm.moveArmHigh();
   }
 }
