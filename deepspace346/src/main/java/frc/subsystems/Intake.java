@@ -16,22 +16,19 @@ import frc.robot.*;
 DONT DO ANYTHING YET ITS NOT DONE
  */
 public class Intake {
-    private TalonSRX sArmMaster;
-    private TalonSRX sArmSlave;
     private TalonSRX sIntake;
     public Intake(){
         this.init();
     }
     public void init(){
-        sArmMaster = new TalonSRX(RobotMap.kArmMasterP);
-        sArmSlave = new TalonSRX(RobotMap.kArmSlaveP);
+       
         sIntake = new TalonSRX(RobotMap.kIntakeP);
-
-        sArmSlave.set(ControlMode.Follower,RobotMap.kArmMasterP);
+        
+        
         this.zero();
     }
     public void zero(){
-        sArmMaster.set(ControlMode.PercentOutput, 0);
+        
         sIntake.set(ControlMode.PercentOutput,0);
     }
     public void intake(){

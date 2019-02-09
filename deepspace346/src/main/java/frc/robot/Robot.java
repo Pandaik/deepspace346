@@ -17,10 +17,13 @@ public class Robot extends TimedRobot {
   public Drive sDrive;
   public Intake sIntake;
   public ControlBoard sControlBoard;
+  public Arm sArm;
+
   public void robotInit() {
     sDrive = new Drive();
     sIntake = new Intake();
     sControlBoard = new ControlBoard();
+    sArm = new Arm();
   }
 
   public void robotPeriodic() {
@@ -44,5 +47,6 @@ public class Robot extends TimedRobot {
   }
 
   public void testPeriodic() {
+    sArm.moveArmHigh();
   }
 }
