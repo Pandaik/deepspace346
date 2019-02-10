@@ -11,10 +11,13 @@ package frc.robot;
  * Add your docs here.
  */
 public class RobotMap {
-    public static final int kFlipMasterRightP = 0;//unlabled
-    public static final int kFlipMasterLeftP = 32;
-    public static final int kFlipSlaveRightP1 = 33;
-    public static final int kFlipSlaveLeftP1 = 34;
+    public static double spd = 1;
+    public static final int kFlipperTPC = 4096;
+
+    public static final int kFlipMasterRightP = 21;//unlabled
+    public static final int kFlipMasterLeftP = 7;//32
+    public static final int kFlipSlaveRightP1 = 5;//33
+    public static final int kFlipSlaveLeftP1 = 34;//34
 
     public static final int kDriveLeftMasterP = 31;
     public static final int kDriveLeftSlaveP1 = 5;
@@ -51,7 +54,7 @@ public class RobotMap {
     public static final int kSlotIdxFlipper = 0;
     public static final int kPIDLoopIdxFlipper = 0;
 
-    public static final int kFlipPoint = 768;
+    public static final int kFlipPoint = (int)((double)270/360*kFlipperTPC);
 
     public static final int kHatchPushP = 3;
     public static final int kHatchGrabP = 2;
@@ -71,4 +74,5 @@ public class RobotMap {
 
     public static final int kPushActive = 5;
     public static final int kPushInactive = 7;
+    
 }

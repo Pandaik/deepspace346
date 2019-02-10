@@ -8,7 +8,8 @@
 package frc.robot;
 
 import frc.subsystems.*;
-
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,8 +22,9 @@ public class Robot extends TimedRobot {
   public Hatch sHatch;
   public Flipper sFlipper;
   public Lights sLights;
-
+  public Preferences prefs;
   public void robotInit() {
+    prefs = Preferences.getInstance();
     sDrive = new Drive();
     sIntake = new Intake();
     sControlBoard = new ControlBoard();
@@ -42,7 +44,8 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     
   }
-
+  Solenoid sol = new Solenoid(3);
+  boolean on = false;
   public void teleopPeriodic() {
     sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
 
@@ -67,15 +70,39 @@ public class Robot extends TimedRobot {
       sHatch.togglePush();
     }
     if(sControlBoard.getConButtonPressed(sControlBoard.LEFT_BUMPER)){
-      sHatch.toggleGrab();
+      sHatch.toggleGra
+    
+    if(sControlBoard.getConButtonPressed(sControlBoard.TRIANGLE)){
+      sFlipper.flipTheThing = true;
     }
     sFlipper.flip(sLights);
     if(!sFlipper.flipping){
       sLights.lightEnabled();
     }
+
     
   }
 
   public void testPeriodic() {
+//Uncomment for fun
+//Wont do anything on actual robot tho so...
+    // if(sControlBoard.getConButton(sControlBoard.X)){
+    //   if(on){
+    //     on = false;
+        
+    //   }else{
+    //     on = true;
+    //   }
+    //   sol.set(on);
+    // }
+
+    RobotMap.spd = prefs.getDouble("spd", 1);
+    if(sControlBoard.getConButton(sControlBoard.TRIANGLE)){
+      sFlipper.testFlip();
+    }else if(sControlBoard.getConButton(sControlBoard.SQUARE)){
+      sFlipper.testRevFlip();
+    }else {
+      sFlipper.testFlipDis();
+    }
   }
 }

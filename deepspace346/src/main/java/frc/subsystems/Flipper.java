@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+// import edu.wpi.first.wpilibj.Preferences;
 import frc.robot.RobotMap;
 
 /**
@@ -22,6 +23,7 @@ public class Flipper {
     private TalonSRX sFlipMasterLeft;
     private TalonSRX sFlipSlaveRight1;
     private TalonSRX sFlipSlaveLeft1;
+    public boolean flipTheThing = false;
     public boolean flipping = false;
     private int phase = 0;
     public Flipper(){
@@ -52,7 +54,7 @@ public class Flipper {
         
         sFlipMasterLeft.setInverted(false);
         sFlipMasterLeft.setSensorPhase(false);
-        sFlipMasterRight.setInverted(false);
+        sFlipMasterRight.setInverted(true);
         sFlipMasterRight.setSensorPhase(false);
 
         sFlipMasterLeft.configNominalOutputForward(0, RobotMap.kTimeoutMs);
@@ -86,33 +88,50 @@ public class Flipper {
         
     }
     public void flip(Lights _light){
-        switch(phase){
-            case 0:
-                flipping = true;
-                sFlipMasterLeft.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
-                sFlipMasterRight.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
-                if(Math.abs(RobotMap.kFlipPoint/2- sFlipMasterLeft.getSelectedSensorPosition())<10){
-                    _light.flipLight(_light.YELLOW);
-                }else{
-                    _light.flipLight(_light.GREEN);
-                }
-                if(Math.abs(RobotMap.kFlipPoint- sFlipMasterLeft.getSelectedSensorPosition())<10){
-                    phase = 1;
-                }
-                break;
-            case 1:
-                _light.flipLight(_light.RED);
-                sFlipMasterLeft.set(ControlMode.MotionMagic, 0);
-                sFlipMasterRight.set(ControlMode.MotionMagic, 0);
-                if(Math.abs(sFlipMasterLeft.getSelectedSensorPosition())<10){
-                    phase = 2;
-                }
-                break;
-            case 2:
-                _light.flipLight(_light.RED);
+        if(flipTheThing){
+            System.out.println(sFlipMasterRight.getSelectedSensorPosition());
+            System.out.println(sFlipMasterRight.getSelectedSensorVelocity());
+            switch(phase){
+                case 0:
+                    flipping = true;
+                    sFlipMasterLeft.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
+                    sFlipMasterRight.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
+                    if(Math.abs(RobotMap.kFlipPoint/2- sFlipMasterLeft.getSelectedSensorPosition())<10){
+                        _light.flipLight(_light.YELLOW);
+                    }else{
+                        _light.flipLight(_light.GREEN);
+                    }
+                    if(Math.abs(RobotMap.kFlipPoint- sFlipMasterLeft.getSelectedSensorPosition())<10){
+                        phase = 1;
+                    }
+                    break;
+                case 1:
+                    _light.flipLight(_light.RED);
+                    sFlipMasterLeft.set(ControlMode.MotionMagic, 0);
+                    sFlipMasterRight.set(ControlMode.MotionMagic, 0);
+                    if(Math.abs(sFlipMasterLeft.getSelectedSensorPosition())<10){
+                        phase = 2;
+                    }
+                    break;
+                case 2:
+                    _light.flipLight(_light.RED);
+            }
         }
         
+        
 
+    }
+    public void testFlip(){
+        sFlipMasterRight.set(ControlMode.PercentOutput,RobotMap.spd);
+        sFlipMasterLeft.set(ControlMode.PercentOutput,RobotMap.spd);
+
+        // System.out.println(sFlipMasterRight.getSelectedSensorPosition());
+    }
+    public void testFlipDis(){
+        sFlipMasterRight.set(ControlMode.PercentOutput,0);
+    }
+    public void testRevFlip(){
+        sFlipMasterRight.set(ControlMode.PercentOutput, -RobotMap.spd);
     }
 
 }
