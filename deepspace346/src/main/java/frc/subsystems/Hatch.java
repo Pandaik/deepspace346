@@ -7,43 +7,53 @@
 
 package frc.subsystems;
 
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+// import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.*;
 
 /**
  * Add your docs here.
  */
 public class Hatch {
-    private Solenoid sPush;
-    private Solenoid sGrab;
-    private boolean pushed;
-    private boolean grabbed;
+    private DoubleSolenoid sPush;
+    private DoubleSolenoid sGrab;
+
+    public boolean canPush = false;
+
+    public boolean pushed;
+    public boolean grabbed;
     public Hatch(){
         this.init();
     }
     public void init(){
         pushed = false;
         grabbed = false;
-        sPush = new Solenoid(RobotMap.kHatchPushP);
-        sGrab = new Solenoid(RobotMap.kHatchGrabP);
-        sPush.set(pushed);
-        sGrab.set(grabbed);
+        sPush = new DoubleSolenoid(RobotMap.kPushActive,RobotMap.kPushInactive);
+        sGrab = new DoubleSolenoid(RobotMap.kGrabActive,RobotMap.kGrabInactive);
+        sPush.set(Value.kReverse);
+        sGrab.set(Value.kReverse);
     }
     public void togglePush(){
         if(pushed){
             pushed = false;
+            sPush.set(Value.kReverse);
         }else{
-            pushed = true;
+            if(canPush) {
+                pushed = true;
+                sPush.set(Value.kForward);
+            }
         }
-        sPush.set(pushed);
     }
     public void toggleGrab(){
         if(grabbed){
             grabbed = false;
+            sGrab.set(Value.kReverse);
         }else{
             grabbed = true;
+            sGrab.set(Value.kForward);
         }
-        sGrab.set(grabbed);
+        
     }
     
 

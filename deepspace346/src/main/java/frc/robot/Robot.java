@@ -19,6 +19,8 @@ public class Robot extends TimedRobot {
   public ControlBoard sControlBoard;
   public Arm sArm;
   public Hatch sHatch;
+  public Flipper sFlipper;
+  public Lights sLights;
 
   public void robotInit() {
     sDrive = new Drive();
@@ -26,6 +28,8 @@ public class Robot extends TimedRobot {
     sControlBoard = new ControlBoard();
     sArm = new Arm();
     sHatch = new Hatch();
+    sFlipper = new Flipper();
+    sLights = new Lights();
   }
 
   public void robotPeriodic() {
@@ -57,14 +61,18 @@ public class Robot extends TimedRobot {
       }
       
     }
-    sArm.moveArm();
+    sArm.moveArm(sHatch);
+
     if(sControlBoard.getConButtonPressed(sControlBoard.RIGHT_BUMPER)){
       sHatch.togglePush();
     }
     if(sControlBoard.getConButtonPressed(sControlBoard.LEFT_BUMPER)){
       sHatch.toggleGrab();
     }
-
+    sFlipper.flip(sLights);
+    if(!sFlipper.flipping){
+      sLights.lightEnabled();
+    }
     
   }
 

@@ -7,7 +7,8 @@
 
 package frc.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+// import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import frc.robot.*;
 
@@ -16,13 +17,13 @@ import frc.robot.*;
 DONT DO ANYTHING YET ITS NOT DONE
  */
 public class Intake {
-    private TalonSRX sIntake;
+    private VictorSPX sIntake;
     public Intake(){
         this.init();
     }
     public void init(){
        
-        sIntake = new TalonSRX(RobotMap.kIntakeP);
+        sIntake = new VictorSPX(RobotMap.kIntakeP);
         
         
         this.zero();
