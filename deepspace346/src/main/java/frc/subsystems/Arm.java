@@ -36,11 +36,10 @@ public class Arm {
     public void moveArm(Hatch _hatch){
         switch(this.armPos){
             case NEUTRAL: //Neutral
-                _hatch.canPush = false;
-                this.moveArmNeutral();
-                break;
-            default:
                 _hatch.canPush = true;
+                this.moveArmNeutral();
+            default:
+                _hatch.canPush = false;
                 sArmMaster.set(ControlMode.MotionMagic, POSITION[armPos]);
                 if(Math.abs(sArmMaster.getSelectedSensorPosition() - POSITION[armPos]) < 10){
                     currArmPos = armPos;

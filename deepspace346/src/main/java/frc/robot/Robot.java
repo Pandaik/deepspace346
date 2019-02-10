@@ -70,10 +70,13 @@ public class Robot extends TimedRobot {
       sHatch.togglePush();
     }
     if(sControlBoard.getConButtonPressed(sControlBoard.LEFT_BUMPER)){
-      sHatch.toggleGra
-    
-    if(sControlBoard.getConButtonPressed(sControlBoard.TRIANGLE)){
+      sHatch.toggleGrab();
+    }
+    if(sControlBoard.getConButtonPressed(sControlBoard.SHARE)&&sControlBoard.getConButtonPressed(sControlBoard.OPTIONS)){
       sFlipper.flipTheThing = true;
+    }
+    if(sControlBoard.getConButtonPressed(sControlBoard.TRIANGLE)){
+      sFlipper.flipTheThing = false;
     }
     sFlipper.flip(sLights);
     if(!sFlipper.flipping){

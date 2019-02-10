@@ -116,6 +116,9 @@ public class Flipper {
                 case 2:
                     _light.flipLight(_light.RED);
             }
+        }else{
+            sFlipMasterLeft.set(ControlMode.MotionMagic, 0);
+            sFlipMasterRight.set(ControlMode.MotionMagic, 0);
         }
         
         
