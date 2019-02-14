@@ -29,7 +29,6 @@ public class Intake {
         this.zero();
     }
     public void zero(){
-        
         sIntake.set(ControlMode.PercentOutput,0);
     }
     public void intake(){
@@ -39,12 +38,11 @@ public class Intake {
         sIntake.set(ControlMode.PercentOutput,RobotMap.kOuttakeSpeed);
     }
     public void controlWithButtons(boolean _intakeButton, boolean _outtakeButton){
-        if(_intakeButton || _outtakeButton){
             if(_intakeButton){
                 this.intake();
             }else{
                 this.outtake();
             }
-        }
+        
     }
 }
