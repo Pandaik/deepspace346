@@ -27,6 +27,14 @@ public class Lights {
     public void lightEnabled(){
         sLight.setSpeed(RobotMap.kLightEnabled);
     }
+    public void lightRocket()
+    {
+        sLight.setSpeed(RobotMap.kRocketEnabled);
+    }
+    public void lightShip()
+    {
+        sLight.setSpeed(RobotMap.kShipEnabled);
+    }
     public void flipLight(double color){
         sLight.setSpeed(color);
     }

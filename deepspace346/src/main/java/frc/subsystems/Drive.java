@@ -8,6 +8,8 @@
 package frc.subsystems;
 import frc.robot.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+// import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -32,23 +34,30 @@ public class Drive {
         sDriveLeftSlave1 = new VictorSPX(RobotMap.kDriveLeftSlaveP1);
         sDriveLeftSlave2 = new VictorSPX(RobotMap.kDriveLeftSlaveP2);
 
-        sDriveLeftSlave1.set(ControlMode.Follower, RobotMap.kDriveLeftMasterP);
-        sDriveLeftSlave2.set(ControlMode.Follower, RobotMap.kDriveLeftMasterP);
+        sDriveLeftSlave1.follow(sDriveLeftMaster);
+        sDriveLeftSlave2.follow(sDriveLeftMaster);
 
         sDriveRightMaster = new TalonSRX(RobotMap.kDriveRightMasterP);
         sDriveRightSlave1 = new VictorSPX(RobotMap.kDriveRightSlaveP1);
         sDriveRightSlave2 = new VictorSPX(RobotMap.kDriveRightSlaveP2);
+        sDriveRightMaster.setNeutralMode(NeutralMode.Brake);
+        sDriveLeftMaster.setNeutralMode(NeutralMode.Brake);
+        sDriveRightSlave1.follow(sDriveRightMaster);
+        sDriveRightSlave2.follow(sDriveRightMaster);
 
-        sDriveRightSlave1.set(ControlMode.Follower, RobotMap.kDriveRightMasterP);
-        sDriveRightSlave2.set(ControlMode.Follower, RobotMap.kDriveRightMasterP);
+        // sDriveRightMaster.setInverted();
     }
     public void driveWithController(double[] _left, double[] _right){
         double lrcon = _left[0];
         double fcon = _right[1];
-        double rspd = fcon - lrcon*RobotMap.kMaxTurnSpeed;
-        double lspd = fcon + lrcon*RobotMap.kMaxTurnSpeed;
+        double rspd = fcon + lrcon*RobotMap.kMaxTurnSpeed;
+        double lspd = -fcon + lrcon*RobotMap.kMaxTurnSpeed;
 
         sDriveLeftMaster.set(ControlMode.PercentOutput, rspd);
         sDriveRightMaster.set(ControlMode.PercentOutput, lspd);
+    }
+    public void driveForward(double _percent){
+        sDriveLeftMaster.set(ControlMode.PercentOutput, _percent);
+        sDriveRightMaster.set(ControlMode.PercentOutput, -_percent);
     }
 }

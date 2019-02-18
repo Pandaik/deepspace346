@@ -8,8 +8,9 @@
 package frc.robot;
 
 import frc.subsystems.*;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.Solenoid;
+// import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,8 @@ public class Robot extends TimedRobot {
   public Lights sLights;
   public Preferences prefs;
   public void robotInit() {
+    CameraServer.getInstance().startAutomaticCapture();
+
     prefs = Preferences.getInstance();
     sDrive = new Drive();
     sIntake = new Intake();
@@ -44,46 +47,70 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     
   }
-  Solenoid sol = new Solenoid(3);
-  boolean on = false;
+  //Solenoid sol = new Solenoid(3);
+  //boolean on = false;
   public void teleopPeriodic() {
+
+    // RobotMap.spd = prefs.getDouble("spd", 1);
+    // RobotMap.kArmVel = prefs.getInt("armVel", 50);
+    // RobotMap.kArmAcc = prefs.getInt("armAccel", 25);
+    // RobotMap.kGainsArm.kP = prefs.getDouble("armP",8);
+    // RobotMap.kGainsArm.kI = prefs.getDouble("armI",0);
+    // RobotMap.kGainsArm.kD = prefs.getDouble("armD",0);
+    // RobotMap.kGainsArm.kF = prefs.getDouble("armF",0);
+    // if(prefs.getBoolean("ArmSpeedEdit", false)){
+    //   sArm.setArmSpeed();
+    // }
+
     sDrive.driveWithController(sControlBoard.getLeftStick(), sControlBoard.getRightStick());
 
-    sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE),
-      sControlBoard.getBoardButton(sControlBoard.OUTTAKE));
-    
-    if(sControlBoard.getConButton(sControlBoard.SQUARE)){
+    // if(sControlBoard.getBoardButton(16)){
+    //   sDrive.driveForward(.25);
+    // }
+    if(sControlBoard.getBoardButtonPressed(sControlBoard.CARGO_START)){
       sArm.setArmPos(sArm.NEUTRAL);
     }else{
-      if(sControlBoard.getConButton(sControlBoard.X)){
+      if(sControlBoard.getBoardButtonPressed(sControlBoard.CARGO_ROCKET)){
         sArm.setArmPos(sArm.HIGH);
       }else{
-        if(sControlBoard.getConButton(sControlBoard.CIRCLE)){
+        if(sControlBoard.getBoardButtonPressed(sControlBoard.CARGO_FLOOR)){
           sArm.setArmPos(sArm.INTAKE);
+        }
+        else if(sControlBoard.getBoardButtonPressed(sControlBoard.CARGO_TRAV)){
+          sArm.setArmPos(sArm.TRAVEL);
+        }
+        else if(sControlBoard.getBoardButtonPressed(sControlBoard.CARGO_SHIP)){
+          sArm.setArmPos(sArm.CARGO);
+        }
+        else if(sControlBoard.getBoardButtonPressed(sControlBoard.CARGO_BAY)){
+          sArm.setArmPos(sArm.BAY);
         }
       }
       
     }
-    sArm.moveArm(sHatch);
+    sArm.moveArm(sLights,sFlipper.flipTheThing);
 
-    if(sControlBoard.getConButtonPressed(sControlBoard.RIGHT_BUMPER)){
-      sHatch.togglePush();
+    if(sControlBoard.getBoardButtonPressed(sControlBoard.HATCH_IN_OUT)){
+      sHatch.toggleGrabPhase();
     }
-    if(sControlBoard.getConButtonPressed(sControlBoard.LEFT_BUMPER)){
-      sHatch.toggleGrab();
-    }
-    if(sControlBoard.getConButtonPressed(sControlBoard.SHARE)&&sControlBoard.getConButtonPressed(sControlBoard.OPTIONS)){
-      sFlipper.flipTheThing = true;
-    }
-    if(sControlBoard.getConButtonPressed(sControlBoard.TRIANGLE)){
-      sFlipper.flipTheThing = false;
-    }
-    sFlipper.flip(sLights);
-    if(!sFlipper.flipping){
-      sLights.lightEnabled();
-    }
+    // if(sControlBoard.getBoardButtonPressed(sControlBoard.HATCH_GRAB)){
+    //   sHatch.toggleGrab();
+    // }
+    // if(sControlBoard.getBoardButtonReleased(sControlBoard.HATCH_IN_OUT)){
+    //   sHatch.togglePush();
+    // }
+    // if(sControlBoard.getBoardButtonReleased(sControlBoard.HATCH_GRAB)){
+    //   sHatch.toggleGrab();
+    // }
 
-    
+    sHatch.grabControl(sControlBoard.getBoardButtonPressed(sControlBoard.HATCH_GRAB), 
+      sControlBoard.getBoardButtonReleased(sControlBoard.HATCH_GRAB));
+
+    sFlipper.testFlip(sControlBoard.getBoardButton(sControlBoard.FLIP),
+      sControlBoard.getBoardButton(sControlBoard.REV_FLIP));
+
+    sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE), 
+      sControlBoard.getBoardButton(sControlBoard.OUTTAKE));    
   }
 
   public void testPeriodic() {
@@ -100,12 +127,43 @@ public class Robot extends TimedRobot {
     // }
 
     RobotMap.spd = prefs.getDouble("spd", 1);
-    if(sControlBoard.getConButton(sControlBoard.TRIANGLE)){
-      sFlipper.testFlip();
-    }else if(sControlBoard.getConButton(sControlBoard.SQUARE)){
-      sFlipper.testRevFlip();
-    }else {
-      sFlipper.testFlipDis();
-    }
-  }
+    RobotMap.kArmVel = prefs.getInt("armVel", 50);
+
+    RobotMap.kArmAcc = prefs.getInt("armAccel", 25);
+    
+    // sFlipper.testFlip(sControlBoard.getConButton(sControlBoard.TRIANGLE),
+    //   sControlBoard.getConButton(sControlBoard.SQUARE));
+    sIntake.controlWithButtons(sControlBoard.getConButton(sControlBoard.SHARE), 
+      sControlBoard.getConButton(sControlBoard.OPTIONS));
+
+    
+    // if(sControlBoard.getConButton(sControlBoard.SQUARE)){
+    //   sArm.setArmPos(sArm.NEUTRAL);
+    // }else{
+    //   if(sControlBoard.getConButton(sControlBoard.TRIANGLE)){
+    //     sArm.setArmPos(sArm.HIGH);
+    //   }else{
+    //     if(sControlBoard.getConButton(sControlBoard.X)){
+    //       sArm.setArmPos(sArm.INTAKE);
+    //     }
+    //     else if(sControlBoard.getConButton(sControlBoard.CIRCLE)){
+    //       sArm.setArmPos(sArm.TRAVEL);
+    //     }
+    //     else if(sControlBoard.getConButton(sControlBoard.RIGHT_BUMPER))
+    //     {
+    //       sArm.setArmPos(sArm.CARGO);
+    //     }
+    //     else if(sControlBoard.getConButton(sControlBoard.LEFT_BUMPER))
+    //     {
+    //       sArm.setArmPos(sArm.BAY);
+    //     }
+    //   }
+      
+    // }
+
+    // sArm.moveArm(sLights,sHatch,sFlipper.flipTheThing);
+    sArm.driveArmTest(sControlBoard.getConButton(sControlBoard.TRIANGLE), 
+      sControlBoard.getConButton(sControlBoard.SQUARE));
+  // }
+}
 }

@@ -9,8 +9,12 @@ package frc.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 
 // import edu.wpi.first.wpilibj.Preferences;
 import frc.robot.RobotMap;
@@ -74,12 +78,21 @@ public class Flipper {
         sFlipMasterRight.setSelectedSensorPosition(0, RobotMap.kSlotIdxFlipper, RobotMap.kTimeoutMs);
         sFlipMasterLeft.setSelectedSensorPosition(0, RobotMap.kSlotIdxFlipper, RobotMap.kTimeoutMs);
 
+        sFlipMasterRight.setNeutralMode(NeutralMode.Brake);
+        sFlipMasterLeft.setNeutralMode(NeutralMode.Brake);
+
         sFlipMasterRight.selectProfileSlot(RobotMap.kSlotIdxFlipper, RobotMap.kPIDLoopIdxArm);
 		sFlipMasterRight.config_kF(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kF, RobotMap.kTimeoutMs);
 		sFlipMasterRight.config_kP(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kP, RobotMap.kTimeoutMs);
 		sFlipMasterRight.config_kI(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kI, RobotMap.kTimeoutMs);
-		sFlipMasterRight.config_kD(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kD, RobotMap.kTimeoutMs);
+        sFlipMasterRight.config_kD(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kD, RobotMap.kTimeoutMs);
         
+        // sFlipMasterRight.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
+        sFlipMasterRight.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
+        // sFlipMasterLeft.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
+        sFlipMasterLeft.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
+
+
         sFlipMasterLeft.selectProfileSlot(RobotMap.kSlotIdxFlipper, RobotMap.kPIDLoopIdxArm);
 		sFlipMasterLeft.config_kF(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsLeftFlipper.kF, RobotMap.kTimeoutMs);
 		sFlipMasterLeft.config_kP(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsLeftFlipper.kP, RobotMap.kTimeoutMs);
@@ -124,17 +137,22 @@ public class Flipper {
         
 
     }
-    public void testFlip(){
-        sFlipMasterRight.set(ControlMode.PercentOutput,RobotMap.spd);
-        sFlipMasterLeft.set(ControlMode.PercentOutput,RobotMap.spd);
+    public void testFlip(boolean _fwd, boolean _rev){
+        if(_fwd){
+            sFlipMasterRight.set(ControlMode.PercentOutput,1);
+            sFlipMasterLeft.set(ControlMode.PercentOutput,1);
+            // _arm.setArmPos(_arm.FLIP);
+            System.out.println("fwd");
+        }else if(_rev){
+            System.out.println("rev");
+            sFlipMasterRight.set(ControlMode.PercentOutput, -.25);
+            sFlipMasterLeft.set(ControlMode.PercentOutput, -.25);
+        }else{
+            sFlipMasterRight.set(ControlMode.PercentOutput,0);
+            sFlipMasterLeft.set(ControlMode.PercentOutput,0);
+        }
+        
 
         // System.out.println(sFlipMasterRight.getSelectedSensorPosition());
     }
-    public void testFlipDis(){
-        sFlipMasterRight.set(ControlMode.PercentOutput,0);
-    }
-    public void testRevFlip(){
-        sFlipMasterRight.set(ControlMode.PercentOutput, -RobotMap.spd);
-    }
-
 }

@@ -19,20 +19,29 @@ public class Hatch {
     private DoubleSolenoid sPush;
     private DoubleSolenoid sGrab;
 
-    public boolean canPush = false;
+    private int grabPhase = 0;
+    private int grabTimer = 0;
+
+    public boolean canPush = true;//reset to false
+
+    public boolean returnable = false;
 
     public boolean pushed;
     public boolean grabbed;
+    public boolean grabState=true; //set true to grab, false to release
+    public boolean grabDone = true;
     public Hatch(){
         this.init();
     }
     public void init(){
         pushed = false;
-        grabbed = false;
+        grabbed = true;
         sPush = new DoubleSolenoid(RobotMap.kPushActive,RobotMap.kPushInactive);
         sGrab = new DoubleSolenoid(RobotMap.kGrabActive,RobotMap.kGrabInactive);
+
+        //Forward is reverse. Don't worry about it
         sPush.set(Value.kReverse);
-        sGrab.set(Value.kReverse);
+        sGrab.set(Value.kForward);
     }
     public void togglePush(){
         if(pushed){
@@ -54,6 +63,86 @@ public class Hatch {
             sGrab.set(Value.kForward);
         }
         
+    }
+    
+    public void toggleGrabPhase(){
+        toggleGrab();
+        grabState = grabbed;
+    }
+
+    public void grabControl(boolean _grabToggle, boolean _return){
+        if(_grabToggle){
+            if(grabState){
+                grabState = false;
+            }else{
+                grabState = true;
+            }
+            grabDone = false;
+        }
+        if(!grabDone){
+            if(grabTimer<10){
+                grabPhase = 0;
+            }else if(grabTimer < 20){
+                grabPhase = 1;
+            }
+            if(_return) returnable = true;
+            if(returnable && grabTimer>20){
+                grabPhase = 2;
+            }
+            if(grabState){
+                this.grab();
+            }else{
+                this.release();
+            }
+            grabTimer+=1;
+        }
+    }
+
+    public void grab(){
+        switch(grabPhase){
+            case 0:
+                if(!pushed){
+                    this.togglePush();
+                }
+                break;
+            case 1:
+                if(!grabbed){
+                    this.toggleGrab();
+                }
+                break;
+            case 2:
+                if(pushed){
+                    this.togglePush();
+                }
+                grabDone = true;
+                grabPhase = 0;
+                grabTimer = 0;
+                returnable = false;
+
+        }
+        
+    }
+    public void release(){
+        switch(grabPhase){
+            case 0:
+                if(!pushed){
+                    this.togglePush();
+                }
+                break;
+            case 1:
+                if(grabbed){
+                    this.toggleGrab();
+                }
+                break;
+            case 2:
+                if(pushed){
+                    this.togglePush();
+                }
+                grabDone = true;
+                grabPhase = 0;
+                grabTimer = 0;
+                
+        }
     }
     
 

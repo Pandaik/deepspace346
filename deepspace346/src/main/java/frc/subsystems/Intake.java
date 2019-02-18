@@ -7,6 +7,7 @@
 
 package frc.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -17,14 +18,14 @@ import frc.robot.*;
 DONT DO ANYTHING YET ITS NOT DONE
  */
 public class Intake {
-    private VictorSPX sIntake;
+    private VictorSPX sIntake;///VICTOR
     public Intake(){
         this.init();
     }
     public void init(){
        
         sIntake = new VictorSPX(RobotMap.kIntakeP);
-        
+        sIntake.setNeutralMode(NeutralMode.Brake);
         
         this.zero();
     }
@@ -40,8 +41,10 @@ public class Intake {
     public void controlWithButtons(boolean _intakeButton, boolean _outtakeButton){
             if(_intakeButton){
                 this.intake();
-            }else{
+            }else if(_outtakeButton){
                 this.outtake();
+            }else{
+                this.zero();
             }
         
     }

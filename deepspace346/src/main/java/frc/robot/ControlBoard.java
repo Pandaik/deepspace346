@@ -25,11 +25,25 @@ public class ControlBoard {
                                 LEFT_STICK = 11,    RIGHT_STICK = 12,
                                 PS = 13,
 
-                                INTAKE = 1,         OUTTAKE = 2;
+                                OUTTAKE = 4,
+
+                                REV_FLIP=1,
+                                CARGO_START=2,
+                                CARGO_BAY=3,
+                                CARGO_FLOOR=5,
+                                CARGO_ROCKET=6,
+                                CARGO_SHIP=7,
+                                FLIP=8,
+                                HATCH_IN_OUT=10,
+                                INTAKE=12,
+                                HATCH_GRAB=13,
+                                CARGO_TRAV=14;
 
 
+                                
     public ControlBoard(){
         con = new XboxController(RobotMap.kControllerP);
+        board = new XboxController(1);
     }
 
     // Returns an array with [X,Y] and converts to Up is positive and Right is positive
@@ -51,6 +65,12 @@ public class ControlBoard {
     }
     public boolean getBoardButtonPressed(int _button){
         return board.getRawButtonPressed(_button);
+    }
+    public boolean getConButtonReleased(int _button){
+        return con.getRawButtonReleased(_button);
+    }
+    public boolean getBoardButtonReleased(int _button){
+        return board.getRawButtonReleased(_button);
     }
 
 }
