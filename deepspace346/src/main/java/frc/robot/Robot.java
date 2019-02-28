@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
     sControlBoard = new ControlBoard();
     sArm = new Arm();
     sHatch = new Hatch();
-    sFlipper = new Flipper();
+    sFlipper = new Flipper(sArm);
     sLights = new Lights();
   }
 

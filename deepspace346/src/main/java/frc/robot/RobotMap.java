@@ -53,6 +53,7 @@ public class RobotMap {
     // public final static int kArmEncoderRev = 1000;
     
     public static final int kArmNeutral = 40;
+    public static final int kArmFlip = 0;
     public static final int kArmUp = 350;
     public static final int kArmIntake = 520;
     public static final int kArmTravel= 190;

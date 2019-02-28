@@ -35,8 +35,10 @@ public class Flipper {
     private CANDigitalInput sLimLeft;
     public boolean flipTheThing = false;
     public boolean flipping = false;
+    public Arm sArm;
     // private int phase = 0;
-    public Flipper(){
+    public Flipper(Arm _arm){
+        this.sArm = _arm;
         this.init();
     }
     public void init(){
@@ -87,6 +89,7 @@ public class Flipper {
         if(_fwd){
             sFlipRight.set(RobotMap.FlipperFwdSpeed);
             sFlipLeft.set(-RobotMap.FlipperFwdSpeed);
+            sArm.setArmPos(sArm.FLIP);
             // _arm.setArmPos(_arm.FLIP);
             // System.out.println("fwd");
         }else if(_rev){

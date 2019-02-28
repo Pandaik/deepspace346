@@ -23,7 +23,7 @@ public class Arm {
     // private TalonSRX sArmSlave;
     public final int NEUTRAL = 0, HIGH = 1, INTAKE = 2, TRAVEL=3,CARGO=4,BAY=5,CARGO_BACK=6,FLIP = 7;
     public int[] POSITION = {RobotMap.kArmNeutral, RobotMap.kArmUp, RobotMap.kArmIntake,
-        RobotMap.kArmTravel,RobotMap.kArmCargo,RobotMap.kArmBay,RobotMap.kArmBackCargo};
+        RobotMap.kArmTravel,RobotMap.kArmCargo,RobotMap.kArmBay,RobotMap.kArmBackCargo, RobotMap.kArmFlip};
     
     private int armPos = NEUTRAL;
     // private int currArmPos = armPos;
@@ -83,8 +83,8 @@ public class Arm {
 
 		sArmMaster.configNominalOutputForward(0, RobotMap.kTimeoutMs);
 		sArmMaster.configNominalOutputReverse(0, RobotMap.kTimeoutMs);
-		sArmMaster.configPeakOutputForward(.4, RobotMap.kTimeoutMs);//.35
-		sArmMaster.configPeakOutputReverse(-.4, RobotMap.kTimeoutMs);
+		sArmMaster.configPeakOutputForward(.5, RobotMap.kTimeoutMs); // CHANGE BACK TO .4 IF THINGS GO WRONG
+		sArmMaster.configPeakOutputReverse(-.5, RobotMap.kTimeoutMs); // CHANGE BACK TO -.4 IF THINGS GO WRONG
 
         sArmMaster.selectProfileSlot(RobotMap.kSlotIdxArm, RobotMap.kPIDLoopIdxArm);
 		sArmMaster.config_kF(RobotMap.kSlotIdxArm, RobotMap.kGainsArm.kF, RobotMap.kTimeoutMs);
