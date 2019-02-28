@@ -38,4 +38,8 @@ public class Lights {
     public void flipLight(double color){
         sLight.setSpeed(color);
     }
+    public void hatchLight()
+    {
+        sLight.setSpeed(RobotMap.kHatchEnabled);
+    }
 }

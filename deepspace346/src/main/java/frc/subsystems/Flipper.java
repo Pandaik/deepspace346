@@ -7,14 +7,15 @@
 
 package frc.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+// import com.ctre.phoenix.motorcontrol.ControlMode;
+// import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+// import com.ctre.phoenix.motorcontrol.NeutralMode;
+// import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+// import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANDigitalInput;
+import com.revrobotics.CANDigitalInput.LimitSwitchPolarity;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 
 // import edu.wpi.first.wpilibj.Preferences;
 import frc.robot.RobotMap;
@@ -23,133 +24,78 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Flipper {
-    private TalonSRX sFlipMasterRight;
-    private TalonSRX sFlipMasterLeft;
-    private TalonSRX sFlipSlaveRight1;
-    private TalonSRX sFlipSlaveLeft1;
+    // private TalonSRX sFlipMasterRight;
+    // private TalonSRX sFlipMasterLeft;
+    // private TalonSRX sFlipSlaveRight1;
+    // private TalonSRX sFlipSlaveLeft1;
+    private CANSparkMax sFlipRight;
+    private CANSparkMax sFlipLeft; 
+    
+    private CANDigitalInput sLimRight;
+    private CANDigitalInput sLimLeft;
     public boolean flipTheThing = false;
     public boolean flipping = false;
-    private int phase = 0;
+    // private int phase = 0;
     public Flipper(){
         this.init();
     }
     public void init(){
-        sFlipMasterRight = new TalonSRX(RobotMap.kFlipMasterRightP);
-        sFlipMasterLeft = new TalonSRX(RobotMap.kFlipMasterLeftP);
-        sFlipSlaveRight1 = new TalonSRX(RobotMap.kFlipSlaveRightP1);
-        sFlipSlaveLeft1 = new TalonSRX(RobotMap.kFlipSlaveLeftP1);
-
-        sFlipSlaveLeft1.set(ControlMode.Follower, RobotMap.kFlipMasterLeftP);
-        sFlipSlaveRight1.set(ControlMode.Follower, RobotMap.kFlipMasterRightP);
+        sFlipRight = new CANSparkMax(RobotMap.kFlipMasterRightP,MotorType.kBrushless);
+        sFlipLeft = new CANSparkMax(RobotMap.kFlipMasterLeftP,MotorType.kBrushless);
         
-        
-        sFlipMasterLeft.configFactoryDefault();
-		sFlipMasterRight.configFactoryDefault();
-
-        sFlipMasterLeft.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 
-            RobotMap.kPIDLoopIdxFlipper, RobotMap.kTimeoutMs);
-        sFlipMasterRight.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,  
-            RobotMap.kPIDLoopIdxFlipper, RobotMap.kTimeoutMs);
-
-        sFlipMasterLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, RobotMap.kTimeoutMs);
-		sFlipMasterLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, RobotMap.kTimeoutMs);
-        sFlipMasterRight.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, RobotMap.kTimeoutMs);
-        sFlipMasterRight.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, RobotMap.kTimeoutMs);
-        
-        sFlipMasterLeft.setInverted(false);
-        sFlipMasterLeft.setSensorPhase(false);
-        sFlipMasterRight.setInverted(true);
-        sFlipMasterRight.setSensorPhase(false);
-
-        sFlipMasterLeft.configNominalOutputForward(0, RobotMap.kTimeoutMs);
-		sFlipMasterLeft.configNominalOutputReverse(0, RobotMap.kTimeoutMs);
-		sFlipMasterLeft.configPeakOutputForward(12, RobotMap.kTimeoutMs);
-		sFlipMasterLeft.configPeakOutputReverse(-12, RobotMap.kTimeoutMs);
-        sFlipMasterRight.configNominalOutputForward(0, RobotMap.kTimeoutMs);
-		sFlipMasterRight.configNominalOutputReverse(0, RobotMap.kTimeoutMs);
-		sFlipMasterRight.configPeakOutputForward(12, RobotMap.kTimeoutMs);
-        sFlipMasterRight.configPeakOutputReverse(-12, RobotMap.kTimeoutMs);
-        
-        sFlipMasterLeft.configMotionCruiseVelocity(RobotMap.kFlipperVel, RobotMap.kTimeoutMs);
-        sFlipMasterLeft.configMotionAcceleration(RobotMap.kFlipperAcc, RobotMap.kTimeoutMs);
-        sFlipMasterRight.configMotionCruiseVelocity(RobotMap.kFlipperVel, RobotMap.kTimeoutMs);
-        sFlipMasterRight.configMotionAcceleration(RobotMap.kFlipperAcc, RobotMap.kTimeoutMs);
-
-        sFlipMasterRight.setSelectedSensorPosition(0, RobotMap.kSlotIdxFlipper, RobotMap.kTimeoutMs);
-        sFlipMasterLeft.setSelectedSensorPosition(0, RobotMap.kSlotIdxFlipper, RobotMap.kTimeoutMs);
-
-        sFlipMasterRight.setNeutralMode(NeutralMode.Brake);
-        sFlipMasterLeft.setNeutralMode(NeutralMode.Brake);
-
-        sFlipMasterRight.selectProfileSlot(RobotMap.kSlotIdxFlipper, RobotMap.kPIDLoopIdxArm);
-		sFlipMasterRight.config_kF(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kF, RobotMap.kTimeoutMs);
-		sFlipMasterRight.config_kP(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kP, RobotMap.kTimeoutMs);
-		sFlipMasterRight.config_kI(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kI, RobotMap.kTimeoutMs);
-        sFlipMasterRight.config_kD(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsRightFlipper.kD, RobotMap.kTimeoutMs);
-        
-        // sFlipMasterRight.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
-        sFlipMasterRight.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
-        // sFlipMasterLeft.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
-        sFlipMasterLeft.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyClosed, 0);
-
-
-        sFlipMasterLeft.selectProfileSlot(RobotMap.kSlotIdxFlipper, RobotMap.kPIDLoopIdxArm);
-		sFlipMasterLeft.config_kF(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsLeftFlipper.kF, RobotMap.kTimeoutMs);
-		sFlipMasterLeft.config_kP(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsLeftFlipper.kP, RobotMap.kTimeoutMs);
-		sFlipMasterLeft.config_kI(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsLeftFlipper.kI, RobotMap.kTimeoutMs);
-		sFlipMasterLeft.config_kD(RobotMap.kSlotIdxFlipper, RobotMap.kPIDsLeftFlipper.kD, RobotMap.kTimeoutMs);
-        
+        sLimRight = sFlipRight.getReverseLimitSwitch(LimitSwitchPolarity.kNormallyClosed);
+        sLimLeft = sFlipLeft.getForwardLimitSwitch(LimitSwitchPolarity.kNormallyClosed);
     }
-    public void flip(Lights _light){
-        if(flipTheThing){
-            System.out.println(sFlipMasterRight.getSelectedSensorPosition());
-            System.out.println(sFlipMasterRight.getSelectedSensorVelocity());
-            switch(phase){
-                case 0:
-                    flipping = true;
-                    sFlipMasterLeft.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
-                    sFlipMasterRight.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
-                    if(Math.abs(RobotMap.kFlipPoint/2- sFlipMasterLeft.getSelectedSensorPosition())<10){
-                        _light.flipLight(_light.YELLOW);
-                    }else{
-                        _light.flipLight(_light.GREEN);
-                    }
-                    if(Math.abs(RobotMap.kFlipPoint- sFlipMasterLeft.getSelectedSensorPosition())<10){
-                        phase = 1;
-                    }
-                    break;
-                case 1:
-                    _light.flipLight(_light.RED);
-                    sFlipMasterLeft.set(ControlMode.MotionMagic, 0);
-                    sFlipMasterRight.set(ControlMode.MotionMagic, 0);
-                    if(Math.abs(sFlipMasterLeft.getSelectedSensorPosition())<10){
-                        phase = 2;
-                    }
-                    break;
-                case 2:
-                    _light.flipLight(_light.RED);
-            }
-        }else{
-            sFlipMasterLeft.set(ControlMode.MotionMagic, 0);
-            sFlipMasterRight.set(ControlMode.MotionMagic, 0);
-        }
+    // public void flip(Lights _light){
+    //     if(flipTheThing){
+    //         System.out.println(sFlipMasterRight.getSelectedSensorPosition());
+    //         System.out.println(sFlipMasterRight.getSelectedSensorVelocity());
+    //         switch(phase){
+    //             case 0:
+    //                 flipping = true;
+    //                 sFlipMasterLeft.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
+    //                 sFlipMasterRight.set(ControlMode.MotionMagic, RobotMap.kFlipPoint);
+    //                 if(Math.abs(RobotMap.kFlipPoint/2- sFlipMasterLeft.getSelectedSensorPosition())<10){
+    //                     _light.flipLight(_light.YELLOW);
+    //                 }else{
+    //                     _light.flipLight(_light.GREEN);
+    //                 }
+    //                 if(Math.abs(RobotMap.kFlipPoint- sFlipMasterLeft.getSelectedSensorPosition())<10){
+    //                     phase = 1;
+    //                 }
+    //                 break;
+    //             case 1:
+    //                 _light.flipLight(_light.RED);
+    //                 sFlipMasterLeft.set(ControlMode.MotionMagic, 0);
+    //                 sFlipMasterRight.set(ControlMode.MotionMagic, 0);
+    //                 if(Math.abs(sFlipMasterLeft.getSelectedSensorPosition())<10){
+    //                     phase = 2;
+    //                 }
+    //                 break;
+    //             case 2:
+    //                 _light.flipLight(_light.RED);
+    //         }
+    //     }else{
+    //         sFlipMasterLeft.set(ControlMode.MotionMagic, 0);
+    //         sFlipMasterRight.set(ControlMode.MotionMagic, 0);
+    //     }
         
         
 
-    }
+    // }
     public void testFlip(boolean _fwd, boolean _rev){
         if(_fwd){
-            sFlipMasterRight.set(ControlMode.PercentOutput,1);
-            sFlipMasterLeft.set(ControlMode.PercentOutput,1);
+            sFlipRight.set(RobotMap.FlipperFwdSpeed);
+            sFlipLeft.set(-RobotMap.FlipperFwdSpeed);
             // _arm.setArmPos(_arm.FLIP);
-            System.out.println("fwd");
+            // System.out.println("fwd");
         }else if(_rev){
-            System.out.println("rev");
-            sFlipMasterRight.set(ControlMode.PercentOutput, -.25);
-            sFlipMasterLeft.set(ControlMode.PercentOutput, -.25);
+            // System.out.println("rev");
+            sFlipRight.set(RobotMap.FlipperRevSpeed);
+            sFlipLeft.set( -RobotMap.FlipperRevSpeed);
         }else{
-            sFlipMasterRight.set(ControlMode.PercentOutput,0);
-            sFlipMasterLeft.set(ControlMode.PercentOutput,0);
+            sFlipRight.set(0);
+            sFlipLeft.set(0);
         }
         
 

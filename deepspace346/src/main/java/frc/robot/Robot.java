@@ -89,8 +89,9 @@ public class Robot extends TimedRobot {
       
     }
     sArm.moveArm(sLights,sFlipper.flipTheThing);
-
+    sDrive.speedBoost(sControlBoard.getBoardButton(sControlBoard.SPEED_BOOST));
     if(sControlBoard.getBoardButtonPressed(sControlBoard.HATCH_IN_OUT)){
+      sLights.hatchLight();
       sHatch.toggleGrabPhase();
     }
     // if(sControlBoard.getBoardButtonPressed(sControlBoard.HATCH_GRAB)){
@@ -106,10 +107,11 @@ public class Robot extends TimedRobot {
     sHatch.grabControl(sControlBoard.getBoardButtonPressed(sControlBoard.HATCH_GRAB), 
       sControlBoard.getBoardButtonReleased(sControlBoard.HATCH_GRAB));
 
+
     sFlipper.testFlip(sControlBoard.getBoardButton(sControlBoard.FLIP),
       sControlBoard.getBoardButton(sControlBoard.REV_FLIP));
 
-    sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.INTAKE), 
+    sIntake.controlWithButtons(sControlBoard.getBoardButton(sControlBoard.CARGO_FLOOR)|| sControlBoard.getBoardButton(sControlBoard.INTAKE), 
       sControlBoard.getBoardButton(sControlBoard.OUTTAKE));    
   }
 

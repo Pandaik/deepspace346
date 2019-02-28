@@ -25,11 +25,11 @@ public class ControlBoard {
                                 LEFT_STICK = 11,    RIGHT_STICK = 12,
                                 PS = 13,
 
-                                OUTTAKE = 4,
+                                OUTTAKE = 3,
 
                                 REV_FLIP=1,
                                 CARGO_START=2,
-                                CARGO_BAY=3,
+                                CARGO_BAY=4,
                                 CARGO_FLOOR=5,
                                 CARGO_ROCKET=6,
                                 CARGO_SHIP=7,
@@ -37,11 +37,14 @@ public class ControlBoard {
                                 HATCH_IN_OUT=10,
                                 INTAKE=12,
                                 HATCH_GRAB=13,
-                                CARGO_TRAV=14;
+                                CARGO_TRAV=14,
+                                SPEED_BOOST=16;
+
 
 
                                 
-    public ControlBoard(){
+    public ControlBoard()
+    {
         con = new XboxController(RobotMap.kControllerP);
         board = new XboxController(1);
     }

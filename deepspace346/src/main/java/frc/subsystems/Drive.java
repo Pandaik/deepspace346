@@ -24,10 +24,18 @@ public class Drive {
     private TalonSRX sDriveRightMaster;
     private VictorSPX sDriveRightSlave1;
     private VictorSPX sDriveRightSlave2;
+    private double maxSpeed;
     //Modes are 0 for one stick throttle one stick turns
 
     public Drive(){
         this.init();
+    }
+    public void speedBoost(boolean _HELLAFAST){
+        if(_HELLAFAST){
+            maxSpeed = 1;
+        }else{
+            maxSpeed = RobotMap.kMaxSpeed;
+        }
     }
     public void init(){
         sDriveLeftMaster = new TalonSRX(RobotMap.kDriveLeftMasterP);
@@ -48,10 +56,10 @@ public class Drive {
         // sDriveRightMaster.setInverted();
     }
     public void driveWithController(double[] _left, double[] _right){
-        double lrcon = _left[0];
-        double fcon = _right[1];
-        double rspd = fcon + lrcon*RobotMap.kMaxTurnSpeed;
-        double lspd = -fcon + lrcon*RobotMap.kMaxTurnSpeed;
+        double lrcon = _left[0]*RobotMap.kMaxTurnSpeed;
+        double fcon = _right[1]*maxSpeed;
+        double rspd = (fcon + lrcon);
+        double lspd = -(fcon - lrcon);
 
         sDriveLeftMaster.set(ControlMode.PercentOutput, rspd);
         sDriveRightMaster.set(ControlMode.PercentOutput, lspd);

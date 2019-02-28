@@ -22,12 +22,15 @@ public class Arm {
     private TalonSRX sArmMaster;
     // private TalonSRX sArmSlave;
     public final int NEUTRAL = 0, HIGH = 1, INTAKE = 2, TRAVEL=3,CARGO=4,BAY=5,CARGO_BACK=6,FLIP = 7;
-    public final int[] POSITION = {RobotMap.kArmNeutral, RobotMap.kArmUp, RobotMap.kArmIntake,
-        RobotMap.kArmTravel,RobotMap.kArmCargo,RobotMap.kArmBay,RobotMap.kArmBackCargo, 40};
-   
+    public int[] POSITION = {RobotMap.kArmNeutral, RobotMap.kArmUp, RobotMap.kArmIntake,
+        RobotMap.kArmTravel,RobotMap.kArmCargo,RobotMap.kArmBay,RobotMap.kArmBackCargo};
+    
     private int armPos = NEUTRAL;
     // private int currArmPos = armPos;
     public Arm(){
+        for(int i = 0; i < POSITION.length; i++){
+            POSITION[i] += RobotMap.kOffset;
+        }
         this.init();
     }
     // public void setArmSpeed(){
@@ -58,7 +61,7 @@ public class Arm {
                 }
 
         }
-        System.out.println(sArmMaster.getSelectedSensorPosition());
+        // System.out.println(sArmMaster.getSelectedSensorPosition());
     }
     public void init(){
         sArmMaster = new TalonSRX(RobotMap.kArmMasterP);
@@ -80,8 +83,8 @@ public class Arm {
 
 		sArmMaster.configNominalOutputForward(0, RobotMap.kTimeoutMs);
 		sArmMaster.configNominalOutputReverse(0, RobotMap.kTimeoutMs);
-		sArmMaster.configPeakOutputForward(1, RobotMap.kTimeoutMs);
-		sArmMaster.configPeakOutputReverse(-1, RobotMap.kTimeoutMs);
+		sArmMaster.configPeakOutputForward(.4, RobotMap.kTimeoutMs);//.35
+		sArmMaster.configPeakOutputReverse(-.4, RobotMap.kTimeoutMs);
 
         sArmMaster.selectProfileSlot(RobotMap.kSlotIdxArm, RobotMap.kPIDLoopIdxArm);
 		sArmMaster.config_kF(RobotMap.kSlotIdxArm, RobotMap.kGainsArm.kF, RobotMap.kTimeoutMs);
